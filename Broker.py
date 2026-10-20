@@ -18,7 +18,8 @@ class Broker:
                 tipe = await reader.reduntil(b';').decode()                   
                 if tipe == "pub" or tipe == "sub":
                     topic = await reader.reduntil(b';').decode()
-                    self.__class__.clients[indirizzo] = {"tipe":tipe, "topic":topic, "writer": writer, "reader":reader} #salvo i dati di ogni client sul dizionario clients    
+                    if indirizzo not in self.__class__.clients:                                                             #se l'indirizzo non è già salvato 
+                        self.__class__.clients[indirizzo] = {"tipe":tipe, "topic":topic, "writer": writer, "reader":reader} #salvo i dati di ogni client sul dizionario clients    
             
             if tipe == "pub":                                                                         #se è un client pub
                 message = await reader.readuntil(b'\n')                                               #leggo anche il messaggio
